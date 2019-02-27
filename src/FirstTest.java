@@ -127,6 +127,28 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testSearchInputPlaceholder() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find Search Wikipedia input",
+                5
+        );
+
+        WebElement element = waitForElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search input",
+                5
+        );
+
+        String searchInputPlaceholder = element.getAttribute("text");
+        Assert.assertEquals(
+                "Search input placeholder doesn't contain expected text!",
+                "Search…",
+                searchInputPlaceholder
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
