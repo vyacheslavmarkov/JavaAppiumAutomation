@@ -190,6 +190,37 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testCheckSearchResultsText() {
+        String query = "Ford";
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find Search Wikipedia input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                query,
+                "Cannot find search input",
+                5
+        );
+
+        // get titles of search results
+        List<WebElement> listItems = waitForElementsPresent(
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "Cannot find search results",
+                15
+        );
+
+        // check that all results contain search query
+        Assert.assertTrue(
+                "Some search results titles don't contain expected query \"" + query + "\"!",
+                listItems.stream().allMatch(p -> p.getAttribute("text").contains(query))
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
