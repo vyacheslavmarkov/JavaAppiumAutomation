@@ -37,6 +37,8 @@ public class FirstTest {
 
     @After
     public void tearDown() {
+        // restore original device orientation
+        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
