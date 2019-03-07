@@ -502,6 +502,165 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testTwoArticlesBehavior() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find Search Wikipedia input",
+                5
+        );
+
+        String search_input_locator = "//*[contains(@text,'Search…')]";
+        waitForElementAndSendKeys(
+                By.xpath(search_input_locator),
+                "Mazda",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Automotive brand manufacturer']"),
+                "Cannot find appropriate search result",
+                15
+        );
+
+        String more_options_locator = "//android.widget.ImageView[@content-desc='More options']";
+        waitForElementAndClick(
+                By.xpath(more_options_locator),
+                "Cannot find button to open article options",
+                15
+        );
+
+        String add_to_list_locator = "//*[@text='Add to reading list']";
+        waitForElementAndClick(
+                By.xpath(add_to_list_locator),
+                "Cannot find option to add article to reading list",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Cannot find 'Got it' tip overlay",
+                5
+        );
+
+        String articles_folder_name_input_locator = "org.wikipedia:id/text_input";
+        waitForElementAndClear(
+                By.id(articles_folder_name_input_locator),
+                "Cannot find input to set name for articles folder",
+                5
+        );
+
+        String name_of_folder = "Vehicle Brands";
+
+        waitForElementAndSendKeys(
+                By.id(articles_folder_name_input_locator),
+                name_of_folder,
+                "Cannot put text into articles folder input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='OK']"),
+                "Cannot press OK button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/menu_page_search"),
+                "Cannot find 'Search' icon",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath(search_input_locator),
+                "Ford",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Automotive brand manufacturer']"),
+                "Cannot find appropriate search result",
+                15
+        );
+
+        waitForElementAndClick(
+                By.xpath(more_options_locator),
+                "Cannot find button to open article options",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath(add_to_list_locator),
+                "Cannot find option to add article to reading list",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='" + name_of_folder + "']"),
+                "Cannot find previously created reading list",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Cannot close article, cannot find X link",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
+                "Cannot find navigation button to My lists",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='"+ name_of_folder + "']"),
+                "Cannot find created folder",
+                5
+        );
+
+        String article_title_ford_locator = "//*[@text='Ford Motor Company']";
+        swipeElementToLeft(
+                By.xpath(article_title_ford_locator),
+                "Cannot find saved article"
+        );
+
+        waitForElementNotPresent(
+                By.xpath(article_title_ford_locator),
+                "Cannot delete saved article",
+                5
+        );
+
+        String article_title_mazda_locator = "//*[@text='Mazda']";
+        waitForElementPresent(
+                By.xpath(article_title_mazda_locator),
+                "Cannot find the second article 'Mazda'",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath(article_title_mazda_locator),
+                "Cannot find the second article 'Mazda'",
+                5
+        );
+
+        WebElement element = waitForElementPresent(
+                By.xpath(article_title_mazda_locator),
+                "Cannot find the second article 'Mazda'",
+                5
+        );
+
+        String article_title = element.getAttribute("text");
+
+        Assert.assertEquals(
+                "Wrong title of the article!",
+                "Mazda",
+                article_title
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
