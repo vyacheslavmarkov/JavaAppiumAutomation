@@ -33,12 +33,12 @@ public class FirstTest {
         capabilities.setCapability("app", "/Users/friend/IdeaProjects/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        // set the expected device orientation
+        driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
     @After
     public void tearDown() {
-        // restore original device orientation
-        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
@@ -523,7 +523,7 @@ public class FirstTest {
         waitForElementAndClick(
                 By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Automotive brand manufacturer']"),
                 "Cannot find appropriate search result",
-                15
+                25
         );
 
         String more_options_locator = "//android.widget.ImageView[@content-desc='More options']";
@@ -590,7 +590,7 @@ public class FirstTest {
         waitForElementAndClick(
                 By.xpath(more_options_locator),
                 "Cannot find button to open article options",
-                5
+                15
         );
 
         waitForElementAndClick(
@@ -618,7 +618,7 @@ public class FirstTest {
         );
 
         waitForElementAndClick(
-                By.xpath("//*[@text='"+ name_of_folder + "']"),
+                By.xpath("//*[@resource-id='org.wikipedia:id/item_title']//*[@text='"+ name_of_folder + "']"),
                 "Cannot find created folder",
                 5
         );
