@@ -618,7 +618,7 @@ public class FirstTest {
         );
 
         waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/item_title']//*[@text='"+ name_of_folder + "']"),
+                By.xpath("//*[@text='"+ name_of_folder + "']"),
                 "Cannot find created folder",
                 5
         );
