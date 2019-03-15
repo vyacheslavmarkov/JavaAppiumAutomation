@@ -6,16 +6,15 @@ import org.openqa.selenium.By;
 public class MyListsPageObject extends MainPageObject {
     public static final String
         FOLDER_BY_NAME_TPL = "//*[@text='{FOLDER_NAME}']",
-        ARTICLE_BY_TILTLE_TPL = "//*[@text='{TITLE}']";
+        ARTICLE_BY_TITLE_TPL = "//*[@text='{TITLE}']";
 
     private static String getFolderXpathByName(String name_of_folder) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", name_of_folder);
     }
 
     private static String getSavedArticleXpathByTitle(String article_title) {
-        return ARTICLE_BY_TILTLE_TPL.replace("{TITLE}", article_title);
+        return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", article_title);
     }
-
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
@@ -56,5 +55,14 @@ public class MyListsPageObject extends MainPageObject {
                 "Cannot find saved article"
         );
         this.waitForArticleToDisappearByTitle(article_title);
+    }
+
+    public void openSavedArticle(String article_title) {
+        String article_xpath = getSavedArticleXpathByTitle(article_title);
+        this.waitForElementAndClick(
+                By.xpath(article_xpath),
+                "Cannot open saved article by title " + article_title,
+                5
+        );
     }
 }
