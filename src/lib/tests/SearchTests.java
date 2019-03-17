@@ -103,4 +103,28 @@ public class SearchTests extends CoreTestCase {
                 listItems.stream().allMatch(p -> p.getAttribute("text").contains(search_line))
         );
     }
+
+    @Test
+    public void testCheckSearchResultsByTitleAndDescription() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        String search_line = "Ford";
+        SearchPageObject.typeSearchLine(search_line);
+
+        // Check 1st element presence
+        SearchPageObject.waitForElementByTitleAndDescription(
+                "Ford Motor Company",
+                "Automotive brand manufacturer");
+
+        // Check 2nd element presence
+        SearchPageObject.waitForElementByTitleAndDescription(
+                "Ford F-Series",
+                "Ford f 350");
+
+        // Check 3rd element presence
+        SearchPageObject.waitForElementByTitleAndDescription(
+                "Ford Mustang",
+                "American muscle car model");
+    }
 }

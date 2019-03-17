@@ -15,7 +15,8 @@ public class SearchPageObject extends MainPageObject {
         SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
         SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
         SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
-        SEARCH_RESULT_ELEMENT_TITLE = "org.wikipedia:id/page_list_item_title";
+        SEARCH_RESULT_ELEMENT_TITLE = "org.wikipedia:id/page_list_item_title",
+        SEARCH_RESULT_ELEMENT_BY_TITLE_SUBTITLE_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']/android.widget.LinearLayout/*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}']/..//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -24,6 +25,10 @@ public class SearchPageObject extends MainPageObject {
     /* TEMPLATES METHODS */
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultSearchElementByTitleAndDescription(String title, String description) {
+        return SEARCH_RESULT_ELEMENT_BY_TITLE_SUBTITLE_TPL.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
     }
     /* TEMPLATES METHODS */
 
@@ -95,5 +100,13 @@ public class SearchPageObject extends MainPageObject {
                 "Search results are not cleared!",
                 5
         );
+    }
+
+    public WebElement waitForElementByTitleAndDescription(String title, String description) {
+        String element_by_title_and_description_xpath = getResultSearchElementByTitleAndDescription(title, description);
+        return this.waitForElementPresent(
+                By.xpath(element_by_title_and_description_xpath),
+                "Cannot find search result by given title \"" + title + "\" and description \"" + description + "\"",
+                15);
     }
 }
