@@ -2,6 +2,7 @@ package lib.tests;
 
 import lib.CoreTestCase;
 import lib.ui.*;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.typeSearchLine("Java");
         SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
         String article_title = ArticlePageObject.getArticleTitle();
         String name_of_folder = "Learning programming";
@@ -37,7 +38,7 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.typeSearchLine("Mazda");
         SearchPageObject.clickByArticleWithSubstring("Automotive brand manufacturer");
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
 
         String name_of_folder = "Vehicle Brands";
