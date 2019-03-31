@@ -16,7 +16,8 @@ public abstract class ArticlePageObject extends MainPageObject {
         CLOSE_ARTICLE_BUTTON,
         SEARCH_BUTTON,
         SAVED_LIST_LOCATOR_TPL,
-        CLOSE_SYNC_POPUP_BUTTON;
+        CLOSE_SYNC_POPUP_BUTTON,
+        ARTICLE_ID_TPL;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -26,10 +27,19 @@ public abstract class ArticlePageObject extends MainPageObject {
     private static String getSavedListElement(String substring) {
         return SAVED_LIST_LOCATOR_TPL.replace("{LIST_NAME}", substring);
     }
+
+    private static String getArticleId(String substring) {
+        return ARTICLE_ID_TPL.replace("{ARTICLE_ID}", substring);
+    }
     /* TEMPLATES METHODS */
 
     public WebElement waitForTitleElement() {
         return this.waitForElementPresent(TITLE, "Cannot find article title on page", 15);
+    }
+
+    public WebElement waitForArticleById(String id) {
+        String article_id = getArticleId(id);
+        return this.waitForElementPresent(article_id, "Cannot find article title on page", 15);
     }
 
     public String getArticleTitle() {

@@ -6,7 +6,8 @@ import lib.Platform;
 public abstract class MyListsPageObject extends MainPageObject {
     public static String
         FOLDER_BY_NAME_TPL,
-        ARTICLE_BY_TITLE_TPL;
+        ARTICLE_BY_TITLE_TPL,
+        ARTICLE_BY_LABEL_TPL;
 
     private static String getFolderXpathByName(String name_of_folder) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", name_of_folder);
@@ -14,6 +15,10 @@ public abstract class MyListsPageObject extends MainPageObject {
 
     private static String getSavedArticleXpathByTitle(String article_title) {
         return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", article_title);
+    }
+
+    private static String getSavedArticleXpathByLabel(String article_title) {
+        return ARTICLE_BY_LABEL_TPL.replace("{LABEL}", article_title);
     }
 
     public MyListsPageObject(AppiumDriver driver) {
@@ -34,6 +39,15 @@ public abstract class MyListsPageObject extends MainPageObject {
         this.waitForElementPresent(
                 article_xpath,
                 "Cannot find saved article by title " + article_title,
+                15
+        );
+    }
+
+    public void waitForArticleToAppearByLabel(String article_label) {
+        String article_xpath = getSavedArticleXpathByLabel(article_label);
+        this.waitForElementPresent(
+                article_xpath,
+                "Cannot find saved article by label " + article_label,
                 15
         );
     }

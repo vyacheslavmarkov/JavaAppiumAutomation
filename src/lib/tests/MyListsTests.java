@@ -55,35 +55,77 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.clickByArticleWithSubstring("Automotive brand manufacturer");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        ArticlePageObject.waitForTitleElement();
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.waitForTitleElement();
+        } else {
+            ArticlePageObject.waitForArticleById("Mazda");
+        }
 
         String name_of_folder = "Vehicle Brands";
-        ArticlePageObject.addArticleToMyList(name_of_folder);
+
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+            // we need to close 'Sync my saved articles' pop-up here
+            ArticlePageObject.closeSyncPopup();
+        }
+
         ArticlePageObject.clickOnSearchButton();
+        if (Platform.getInstance().isIOS()) {
+            SearchPageObject.clearSearchInput();
+        }
 
         SearchPageObject.typeSearchLine("Ford");
         SearchPageObject.clickByArticleWithSubstring("Automotive brand manufacturer");
-        ArticlePageObject.addArticleToSavedList(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.waitForTitleElement();
+        } else {
+            ArticlePageObject.waitForArticleById("Ford Motor Company");
+        }
+
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToSavedList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
+
         ArticlePageObject.closeArticle();
+        if (Platform.getInstance().isIOS()) {
+            // need to close first article too
+            ArticlePageObject.closeArticle();
+        }
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListPageObject = MyListsPageObjectFactory.get(driver);
-        MyListPageObject.openFolderByName(name_of_folder);
+
+        if (Platform.getInstance().isAndroid()) {
+            MyListPageObject.openFolderByName(name_of_folder);
+        }
         String article_title_ford = "Ford Motor Company";
         MyListPageObject.swipeByArticleToDelete(article_title_ford);
 
         String article_title_mazda = "Mazda";
-        MyListPageObject.waitForArticleToAppearByTitle(article_title_mazda);
+        if (Platform.getInstance().isAndroid()) {
+            MyListPageObject.waitForArticleToAppearByTitle(article_title_mazda);
+        } else {
+            MyListPageObject.waitForArticleToAppearByLabel("Mazda");
+        }
+
         MyListPageObject.openSavedArticle(article_title_mazda);
 
-        String article_title = ArticlePageObject.getArticleTitle();
-
-        assertEquals(
-                "Wrong title of the article!",
-                "Mazda",
-                article_title
-        );
+        if (Platform.getInstance().isAndroid()) {
+            String article_title = ArticlePageObject.getArticleTitle();
+            assertEquals(
+                    "Wrong title of the article!",
+                    "Mazda",
+                    article_title
+            );
+        } else {
+            // for iOS it is checked that article has appropriate accessibility_id
+            ArticlePageObject.waitForArticleById("Mazda");
+        }
     }
 }
