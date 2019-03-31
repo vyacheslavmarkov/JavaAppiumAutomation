@@ -1,6 +1,7 @@
 package lib.tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
@@ -107,25 +108,31 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testCheckSearchResultsByTitleAndDescription() {
-        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);;
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         String search_line = "Ford";
         SearchPageObject.typeSearchLine(search_line);
 
-        // Check 1st element presence
-        SearchPageObject.waitForElementByTitleAndDescription(
-                "Ford Motor Company",
-                "Automotive brand manufacturer");
+        if (Platform.getInstance().isAndroid()) {
+            // Check 1st element presence
+            SearchPageObject.waitForElementByTitleAndDescription(
+                    "Ford Motor Company",
+                    "Automotive brand manufacturer");
 
-        // Check 2nd element presence
-        SearchPageObject.waitForElementByTitleAndDescription(
-                "Ford F-Series",
-                "Ford f 350");
+            // Check 2nd element presence
+            SearchPageObject.waitForElementByTitleAndDescription(
+                    "Ford F-Series",
+                    "Ford f 350");
 
-        // Check 3rd element presence
-        SearchPageObject.waitForElementByTitleAndDescription(
-                "Ford Mustang",
-                "American muscle car model");
+            // Check 3rd element presence
+            SearchPageObject.waitForElementByTitleAndDescription(
+                    "Ford Mustang",
+                    "American muscle car model");
+        } else {
+            SearchPageObject.waitForSearchResult("Ford Motor Company\nAutomotive brand manufacturer");
+            SearchPageObject.waitForSearchResult("Ford F-Series\nFord f 350");
+            SearchPageObject.waitForSearchResult("Ford Mustang\nAmerican muscle car model");
+        }
     }
 }
