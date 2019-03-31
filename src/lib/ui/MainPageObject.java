@@ -140,10 +140,10 @@ public class MainPageObject {
         int width = element.getSize().getWidth();
 
         int point_to_click_x = (right_x + width) - 3;
-        int pount_to_click_y = middel_y;
+        int point_to_click_y = middel_y;
 
         TouchAction action = new TouchAction(driver);
-        action.tap(point_to_click_x, pount_to_click_y).perform();
+        action.tap(point_to_click_x, point_to_click_y).perform();
     }
 
     public void swipeElementToLeft(String locator, String error_message) {
@@ -163,7 +163,7 @@ public class MainPageObject {
         action.waitAction(300);
 
         if (Platform.getInstance().isAndroid()) {
-            action.moveTo(right_x, middle_y);
+            action.moveTo(left_x, middle_y);
         } else {
             int offset_x = (-1 * element.getSize().getWidth());
             action.moveTo(offset_x, 0);
