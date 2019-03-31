@@ -15,7 +15,8 @@ public abstract class ArticlePageObject extends MainPageObject {
         MY_LIST_OK_BUTTON,
         CLOSE_ARTICLE_BUTTON,
         SEARCH_BUTTON,
-        SAVED_LIST_LOCATOR_TPL;
+        SAVED_LIST_LOCATOR_TPL,
+        CLOSE_SYNC_POPUP_BUTTON;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -111,10 +112,25 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
+    public void addArticleToMySaved() {
+        this.waitForElementAndClick(
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                "Cannot find option to add article to reading list",
+                5);
+    }
+
     public void closeArticle() {
         this.waitForElementAndClick(
                 CLOSE_ARTICLE_BUTTON,
                 "Cannot close article, cannot find X link",
+                5
+        );
+    }
+
+    public void closeSyncPopup() {
+        this.waitForElementAndClick(
+                CLOSE_SYNC_POPUP_BUTTON,
+                "Cannot close sync pop-up, cannot find X link",
                 5
         );
     }
