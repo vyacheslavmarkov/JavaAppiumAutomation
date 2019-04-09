@@ -179,7 +179,7 @@ public class MainPageObject {
         pointOption.withCoordinates(right_x, middle_y);
         action.press(pointOption);
         WaitOptions waitOptions = new WaitOptions();
-        waitOptions.withDuration(Duration.ofSeconds(300));
+        waitOptions.withDuration(Duration.ofMillis(300));
         action.waitAction(waitOptions);
 
         if (Platform.getInstance().isAndroid()) {
