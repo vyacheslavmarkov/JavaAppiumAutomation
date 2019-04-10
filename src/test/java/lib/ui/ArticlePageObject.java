@@ -1,8 +1,8 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 import lib.Platform;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public abstract class ArticlePageObject extends MainPageObject {
     protected static String
@@ -19,7 +19,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         CLOSE_SYNC_POPUP_BUTTON,
         ARTICLE_ID_TPL;
 
-    public ArticlePageObject(AppiumDriver driver) {
+    public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 

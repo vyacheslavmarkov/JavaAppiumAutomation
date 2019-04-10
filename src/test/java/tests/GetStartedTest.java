@@ -8,7 +8,7 @@ import org.junit.Test;
 public class GetStartedTest extends CoreTestCase {
 
     @Test
-    public void testPassThroughWelocme() {
+    public void testPassThroughWelcome() {
         if (Platform.getInstance().isAndroid()) {
             return;
         }
