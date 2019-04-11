@@ -11,6 +11,9 @@ import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
     private static final String name_of_folder = "Learning programming";
+    private static final String
+            login = "Vmarkov1991",
+            password = "wiki_testing";
 
     @Test
     public void testSaveFirstArticleToMyList() {
@@ -18,7 +21,7 @@ public class MyListsTests extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        SearchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
@@ -28,13 +31,32 @@ public class MyListsTests extends CoreTestCase {
             ArticlePageObject.addArticleToMyList(name_of_folder);
         } else {
             ArticlePageObject.addArticleToMySaved();
-            // we need to close 'Sync my saved articles' pop-up here
-            ArticlePageObject.closeSyncPopup();
+
+            if (Platform.getInstance().isIOS()) {
+                // we need to close 'Sync my saved articles' pop-up here (iOS)
+                ArticlePageObject.closeSyncPopup();
+            }
+        }
+        if (Platform.getInstance().isMW()) {
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+
+            ArticlePageObject.waitForTitleElement();
+
+            assertEquals("We are not on the same page after login",
+                    article_title,
+                    ArticlePageObject.getArticleTitle());
+
+            // article adds to the watchlist automatically after login
+            ArticlePageObject.addArticleToMySaved();
         }
 
         ArticlePageObject.closeArticle();
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
