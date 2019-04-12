@@ -10,6 +10,7 @@ public class MWArticlePageObject extends ArticlePageObject {
         OPTIONS_ADD_TO_MY_LIST_BUTTON = "css:#page-actions #ca-watch.mw-ui-icon-mf-watch";
         OPTIONS_REMOVE_FROM_MY_LIST_BUTTON = "css:#page-actions #ca-watch.mw-ui-icon-mf-watched";
         SEARCH_BUTTON = "css:button#searchIcon";
+        ARTICLE_CONTENTS = "xpath://div[contains(@class, 'mf-section-0')]//b[contains(text(), '{CONTENT}')]";
     }
 
     public MWArticlePageObject(RemoteWebDriver driver) {

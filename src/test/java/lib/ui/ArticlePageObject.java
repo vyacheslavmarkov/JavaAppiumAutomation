@@ -18,7 +18,8 @@ public abstract class ArticlePageObject extends MainPageObject {
         SEARCH_BUTTON,
         SAVED_LIST_LOCATOR_TPL,
         CLOSE_SYNC_POPUP_BUTTON,
-        ARTICLE_ID_TPL;
+        ARTICLE_ID_TPL,
+        ARTICLE_CONTENTS;
 
     public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
@@ -32,6 +33,10 @@ public abstract class ArticlePageObject extends MainPageObject {
     private static String getArticleId(String substring) {
         return ARTICLE_ID_TPL.replace("{ARTICLE_ID}", substring);
     }
+
+    private static String getBodyContent(String substring) {
+        return ARTICLE_CONTENTS.replace("{CONTENT}", substring);
+    }
     /* TEMPLATES METHODS */
 
     public WebElement waitForTitleElement() {
@@ -41,6 +46,11 @@ public abstract class ArticlePageObject extends MainPageObject {
     public WebElement waitForArticleById(String id) {
         String article_id = getArticleId(id);
         return this.waitForElementPresent(article_id, "Cannot find article title on page", 15);
+    }
+
+    public WebElement waiForArticleByBodyContent(String substring) {
+        String body_content = getBodyContent(substring);
+        return this.waitForElementPresent(body_content, "Cannot find article contents on page", 15);
     }
 
     public String getArticleTitle() {

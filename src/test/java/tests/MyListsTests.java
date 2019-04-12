@@ -8,6 +8,7 @@ import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 
 public class MyListsTests extends CoreTestCase {
     private static final String name_of_folder = "Learning programming";
@@ -74,10 +75,11 @@ public class MyListsTests extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Mazda");
-        SearchPageObject.clickByArticleWithSubstring("Automotive brand manufacturer");
+        SearchPageObject.clickByArticleWithSubstring("utomotive brand manufacturer");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        if (Platform.getInstance().isAndroid()) {
+
+        if ((Platform.getInstance().isAndroid()) || Platform.getInstance().isMW()) {
             ArticlePageObject.waitForTitleElement();
         } else {
             ArticlePageObject.waitForArticleById("Mazda");
@@ -89,8 +91,30 @@ public class MyListsTests extends CoreTestCase {
             ArticlePageObject.addArticleToMyList(name_of_folder);
         } else {
             ArticlePageObject.addArticleToMySaved();
-            // we need to close 'Sync my saved articles' pop-up here
-            ArticlePageObject.closeSyncPopup();
+
+            if (Platform.getInstance().isIOS()) {
+                // we need to close 'Sync my saved articles' pop-up here (iOS)
+                ArticlePageObject.closeSyncPopup();
+            }
+        }
+
+        String article_title;
+        if (Platform.getInstance().isMW()) {
+            // save the article title first
+            article_title = ArticlePageObject.getArticleTitle();
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+
+            ArticlePageObject.waitForTitleElement();
+
+            assertEquals("We are not on the same page after login",
+                    article_title,
+                    ArticlePageObject.getArticleTitle());
+
+            // article adds to the watchlist automatically after login
+            ArticlePageObject.addArticleToMySaved();
         }
 
         ArticlePageObject.clickOnSearchButton();
@@ -99,10 +123,15 @@ public class MyListsTests extends CoreTestCase {
         }
 
         SearchPageObject.typeSearchLine("Ford");
-        SearchPageObject.clickByArticleWithSubstring("Automotive brand manufacturer");
-        if (Platform.getInstance().isAndroid()) {
-            ArticlePageObject.waitForTitleElement();
+        // subtitle is really different in mobile apps and in web
+        if (Platform.getInstance().isMW()) {
+            SearchPageObject.clickByArticleWithSubstring("merican automobile manufacturer");
         } else {
+            SearchPageObject.clickByArticleWithSubstring("Automotive brand manufacturer");
+        }
+        if ((Platform.getInstance().isAndroid() || Platform.getInstance().isMW())) {
+            ArticlePageObject.waitForTitleElement();
+        } else if (Platform.getInstance().isIOS()) {
             ArticlePageObject.waitForArticleById("Ford Motor Company");
         }
 
@@ -119,6 +148,7 @@ public class MyListsTests extends CoreTestCase {
         }
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListPageObject = MyListsPageObjectFactory.get(driver);
@@ -130,7 +160,7 @@ public class MyListsTests extends CoreTestCase {
         MyListPageObject.swipeByArticleToDelete(article_title_ford);
 
         String article_title_mazda = "Mazda";
-        if (Platform.getInstance().isAndroid()) {
+        if ((Platform.getInstance().isAndroid() || Platform.getInstance().isMW())) {
             MyListPageObject.waitForArticleToAppearByTitle(article_title_mazda);
         } else {
             MyListPageObject.waitForArticleToAppearByLabel("Mazda");
@@ -139,15 +169,18 @@ public class MyListsTests extends CoreTestCase {
         MyListPageObject.openSavedArticle(article_title_mazda);
 
         if (Platform.getInstance().isAndroid()) {
-            String article_title = ArticlePageObject.getArticleTitle();
+            article_title = ArticlePageObject.getArticleTitle();
             assertEquals(
                     "Wrong title of the article!",
                     "Mazda",
                     article_title
             );
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             // for iOS it is checked that article has appropriate accessibility_id
             ArticlePageObject.waitForArticleById("Mazda");
+        } else {
+            // for MW it is checked that article content contains appropriate char sequence
+            ArticlePageObject.waiForArticleByBodyContent("Mazda Motor Corporation");
         }
     }
 }
