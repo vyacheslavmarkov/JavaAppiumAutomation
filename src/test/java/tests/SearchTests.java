@@ -114,22 +114,24 @@ public class SearchTests extends CoreTestCase {
         String search_line = "Ford";
         SearchPageObject.typeSearchLine(search_line);
 
-        if (Platform.getInstance().isAndroid()) {
+        if ((Platform.getInstance().isAndroid() || Platform.getInstance().isMW())) {
             // Check 1st element presence
+            // Description for this item is different in MW and Android
+            String description = Platform.getInstance().isMW() ? "American automobile manufacturer" : "Automotive brand manufacturer";
             SearchPageObject.waitForElementByTitleAndDescription(
                     "Ford Motor Company",
-                    "Automotive brand manufacturer");
+                    description);
 
             // Check 2nd element presence
             SearchPageObject.waitForElementByTitleAndDescription(
                     "Ford F-Series",
-                    "Ford f 350");
+                    "ord f 350");
 
             // Check 3rd element presence
             SearchPageObject.waitForElementByTitleAndDescription(
                     "Ford Mustang",
-                    "American muscle car model");
-        } else {
+                    "merican muscle car model");
+        } else if (Platform.getInstance().isIOS()) {
             SearchPageObject.waitForSearchResult("Ford Motor Company\nAutomotive brand manufacturer");
             SearchPageObject.waitForSearchResult("Ford F-Series\nFord f 350");
             SearchPageObject.waitForSearchResult("Ford Mustang\nAmerican muscle car model");
