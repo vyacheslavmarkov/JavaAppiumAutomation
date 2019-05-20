@@ -137,4 +137,6 @@ public class SearchTests extends CoreTestCase {
             SearchPageObject.waitForSearchResult("Ford Mustang\nAmerican muscle car model");
         }
     }
+
+    // test comment
 }
